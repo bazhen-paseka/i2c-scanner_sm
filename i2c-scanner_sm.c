@@ -14,7 +14,7 @@
 *							INCLUDE FILES
 **************************************************************************
 */
-
+	#include "i2c-scanner_sm.h"
 /*
 **************************************************************************
 *							LOCAL DEFINES
@@ -62,6 +62,27 @@
 *                           GLOBAL FUNCTIONS
 **************************************************************************
 */
+
+void Scan_I2C_to_DBG( I2C_HandleTypeDef* hi2c ) {
+	DBG1("Start scan I2C:\r\n" );
+	for ( uint8_t i2c_add = 0x07; i2c_add < 0x78; i2c_add++) {
+		if (HAL_I2C_IsDeviceReady(hi2c, i2c_add << 1, 10, 100) == HAL_OK) {
+			switch (i2c_add) {
+				case 0x23: DBG1("0x%x BH1750  \r\n", i2c_add); break;
+				case 0x27: DBG1("0x%x FC113   \r\n", i2c_add); break;
+				case 0x20: DBG1("0x%x PCF8574 \r\n", i2c_add); break;
+				case 0x38: DBG1("0x%x PCF8574 \r\n", i2c_add); break;
+				case 0x3F: DBG1("0x%x LCD1602 \r\n", i2c_add); break;
+				case 0x57: DBG1("0x%x AT24C32 or MAX30100 \r\n", i2c_add); break;
+				case 0x68: DBG1("0x%x DS3231 or MPU9250  \r\n",  i2c_add); break;
+				case 0x76: DBG1("0x%x BMP280  \r\n", i2c_add); break;
+				case 0x77: DBG1("0x%x BMP180  \r\n", i2c_add); break;
+				default:   DBG1("0x%x Unknown \r\n", i2c_add); break;
+			}
+		} // if
+	} // for
+	DBG1("End scan I2C.\r\n");
+} //**************************************************************************
 
 /*
 **************************************************************************
